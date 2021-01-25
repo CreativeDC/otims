@@ -1,0 +1,156 @@
+<section class="content">
+        <!-- Default box -->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Book Distribution nodes</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <button type="button" href="#" ng-click="showAddNodeModal()" class="btn btn-block btn-primary pull-right" style="width:7%;">
+                    <i class="fa fa-plus"></i> Add Node</button>
+                <br>
+                <div class="box-body">
+
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Node Id</th>
+                                <th>Node Code </th>
+                                <th>Node Level Code</th>
+                                <th>Node Title </th>
+                                <th>Description</th>
+                                <th>Node province</th>
+                                <th>Node District</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="node in nodes | filter:searchText">
+                                <td>{{  node.id }}</td>
+                                <td><a href="#/node/{{node.id}}">{{  node.code }}</a></td>
+                                <td>{{  node.level_id }}</td>
+                                <td>{{  node.title }}</td>
+                                <td>{{  node.description }}</td>
+                                <td>{{  node.province }}</td>
+                                <td>{{  node.district }}</td>
+                                <td align="center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle notext small" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-tasks"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a class="edit_node" ><i class="fa fa-edit"></i> Edit {{node.code}}</a></li>
+                                            <li><a class="view_node" ng-click="loadNodePage(node.id)"><i class="fa fa-eye"></i> view {{node.code}}</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- End of Table-to-load-the-data Part -->
+                    </div>
+                    <div class="text-right"><button class="btn btn-primary" ng-disabled="currentPage >= lastPage" ng-click="loadMoreNodes()" id="loadMoreButton" >{{loadMoreText}}</button></div>
+
+                    <!-- Modal (Pop up when detail button clicked) -->
+                    <div class="modal fade" id="addNodeModal" tabindex="-1" role="dialog" aria-labelledby="addNodeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title" id="addNodeModalLabel">Add A New Node</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form name="frmAddNode" class="form-horizontal" novalidate="">
+
+                                        <div class="form-group error">
+                                            <label for="level_id" class="col-sm-3 control-label">Node level</label>
+                                            <div class="col-sm-9">
+                                                <select name="level_id" class="form-control" ng-model="node.level_id"  ng-change="update_node_parent()"ng-required="true">
+                                                        <option value="0"> Select level for this node</option>
+                                                        <option ng-repeat="level in level_list" value="{{level.id}}"> {{level.title}} - code : {{level.code}}</option>
+                                                </select>
+                                                <span class="help-inline"
+                                                      ng-show="frmAddNode.level_id.$invalid && frmAddNode.level_id.$touched">We can't let you continue without selecting one level for this node</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="parent_node" class="col-sm-3 control-label">Parent Node</label>
+                                            <div class="col-sm-9">
+                                                <select name="parent_id" class="form-control" ng-model="node.parent_id"  ng-required="true">
+                                                    <option value="0"> Select parent for this node</option>
+                                                    <option ng-repeat="parent_node in parent_level_list" value="{{parent_node.id}}"> {{parent_node.title}}</option>
+                                                </select>
+                                                <span class="help-inline"
+                                                      ng-show="frmAddNode.parent_id.$invalid && frmAddNode.parent_id.$touched">We can't let you continue without selecting one parent for this node</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="province" class="col-sm-3 control-label">Node location, Province</label>
+                                            <div class="col-sm-9">
+                                                <select name="province" class="form-control" ng-model="node.province" ng-change="update_node_district()" ng-required="true">
+                                                    <option value="0"> Select province</option>
+                                                    <option ng-repeat="province in province_list" value="{{province.id}}"> {{province.dr_name}}</option>
+                                                </select>
+                                                <span class="help-inline"
+                                                      ng-show="frmAddNode.province.$invalid && frmAddNode.province.$touched">We can't let you continue without selecting one province for this node</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="district" class="col-sm-3 control-label">Node location, District</label>
+                                            <div class="col-sm-9">
+                                                <select name="district" class="form-control" ng-model="node.district"  ng-required="true">
+                                                    <option value="0"> Select district</option>
+                                                    <option ng-repeat="district in district_list" value="{{district.id}}"> {{district.dr_name}}</option>
+                                                </select>
+                                                <span class="help-inline"
+                                                      ng-show="frmAddNode.district.$invalid && frmAddNode.district.$touched">We can't let you continue without selecting one district for this node</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="title" class="col-sm-3 control-label">Node Title</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control has-error" id="title" name="title" placeholder="Node title" value=""
+                                                       ng-model="node.title" ng-required="true">
+											<span class="help-inline"
+                                                  ng-show="frmAddNode.title.$invalid && frmAddNode.title.$touched">We can't let you continue without a valid Node title</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="description" class="col-sm-3 control-label">Description</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control has-error" id="description" name="description" placeholder="Description" value=""
+                                                       ng-model="node.description" ng-required="false"/>
+											<span class="help-inline"
+                                                  ng-show="frmAddNode.description.$invalid && frmAddNode.description.$touched">It is better to provide the description for the node</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group error">
+                                            <label for="code" class="col-sm-3 control-label">Node Code</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control has-error" id="code" name="code" placeholder="Node Code" value=""
+                                                       ng-model="node.code" ng-required="true">
+											<span class="help-inline"
+                                                  ng-show="frmAddNode.code.$invalid && frmAddNode.code.$touched">We can't let you continue without a Node code</span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="addNode()" ng-disabled="frmAddNode.$invalid">Add Node </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+    </section>

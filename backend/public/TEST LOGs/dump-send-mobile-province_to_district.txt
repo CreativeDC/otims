@@ -1,0 +1,31 @@
+array (
+  'title' => 'mobile test 2',
+  'description' => '',
+  'sent_grades' => 
+  array (
+    0 => NULL,
+    1 => true,
+    2 => false,
+    3 => false,
+    4 => false,
+    5 => false,
+    6 => false,
+    7 => false,
+    8 => false,
+    9 => false,
+    10 => false,
+    11 => false,
+    12 => false,
+  ),
+  'level_to' => '14',
+  'province_to' => '1',
+  'district_to' => '2',
+  'to' => '19558',
+  'send_date' => '2019-07-24',
+  'lang' => 
+  array (
+    '5_1_1' => '100',
+    '5_2_1' => '100',
+  ),
+  'api_token' => 'UfXsBHzE0PYVbw0XETSvUlbKCy5F2AW1lAd7VfeXI88hhZEZIEYQbHSJCTOp',
+)

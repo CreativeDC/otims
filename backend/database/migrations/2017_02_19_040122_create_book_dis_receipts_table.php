@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateBookDisReceiptsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('book_dis_receipts', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
+            $table->increments('id');
+            $table->string('title');
+            $table->string('description');
+
+            $table->date('receive_date')->nullable();
+            $table->integer('from')->unsigned()->nullable();
+            $table->integer('to')->unsigned()->nullable();
+            $table->integer('creator_id')->unsigned()->nullable();
+            $table->timestamps();
+
+            $table->foreign('from')->references('id')->on('book_dis_meta_vendors');
+            $table->foreign('to')->references('id')->on('book_dis_nodes');
+            $table->foreign('creator_id')->references('id')->on('users');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('book_dis_receipts');
+    }
+}

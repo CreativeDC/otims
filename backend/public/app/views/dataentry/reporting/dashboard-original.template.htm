@@ -1,0 +1,1364 @@
+<section class="content">
+    <div class="row">
+        <!-- Left col -->
+        <div class="col-md-8">
+
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Sent packages</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Package ID</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="package_sent in sent_list | filter:searchText">
+                                <td>{{  package_sent.id }}</td>
+                                <td>{{  package_sent.title }}</td>
+                                <td>{{  package_sent.description }}</td>
+                                <td>{{  package_sent.from_node }}</td>
+                                <td>{{  package_sent.to_node }}</td>
+                                <td align="center">
+                                    <a class="btn btn-sm btn-info btn-flat" ng-click="loadDetailSentPage(package_sent.id)"><i class="fa fa-eye"></i> View detail</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" ng-click="loadSentPage()" class="btn btn-sm btn-info btn-flat pull-left">Send a new package</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All packages</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+
+
+            <div class="box box-info" ng-show="has_parent == 1">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Received packages</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Send Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="package_received in receive_list | filter:searchText">
+                                <td>{{  package_received.title }}</td>
+                                <td>{{  package_received.description }}</td>
+                                <td>{{  package_received.send_date }}</td>
+                                <td>{{  package_received.From_title }}</td>
+                                <td>{{  package_received.To_title }}</td>
+                                <td ng-show="{{ package_received.recieved == 1 }}"><span class="label label-success" ng-show="{{package_received.recieved == 1}}">Received</span></td>
+                                <td ng-show="{{ package_received.recieved == 0 }}"><span class="label label-danger" ng-show="{{package_received.recieved == 0}}">Pending</span></td>
+                                <td align="center">
+                                    <a class="btn btn-sm btn-info btn-flat" ng-click="loadDetailReceivePage(package_received.recieved_id)"><i class="fa fa-eye"></i> View detail </a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" ng-click="loadSentPage()" class="btn btn-sm btn-info btn-flat pull-left">Send a new package</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All packages</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+
+
+            <!-- Modal (Pop up when detail button clicked) -->
+            <div class="modal fade" id="showSentDetailModal" tabindex="-1" role="dialog" aria-labelledby="showSentDetailModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="width: 60%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="addNodeModalLabel">Detail of Shipment {{sent_shipment.title  }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" table-responsive">
+                                <table class="table table-striped table-bordered" name="eventreq-list">
+
+                                    <tbody>
+                                    <tr>
+                                        <th>Shipment Title</th>
+                                        <td>{{ sent_shipment.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shipment description </th>
+                                        <td>{{sent_shipment.description}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Send date</th>
+                                        <td>{{sent_shipment.send_date}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Receive date</th>
+                                        <td>{{sent_shipment.receive_date}}</td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="box-body">
+
+                                <div class="tabbable tabs-below" ng-init="selectedTabDetail= 1;">
+                                    <ul class="nav nav-tabs nav-justified">
+                                        <li ng-class="{active: selectedTabDetail == {{detail_lang.language_id}}}"  ng-repeat="detail_lang in sent_record_langs">
+                                            <a href="javascript:void(0)" ng-click=" setSelectedTabDetail(detail_lang.language_id)">{{detail_lang.language}} </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" ng-repeat="detail_lang in sent_record_langs" ng-show="selectedTabDetail == {{detail_lang.language_id}}"
+                                         ng-class="animation"
+                                            >
+                                        <div class="table-responsive">
+                                            <table class="table no-margin">
+                                                <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Grade</th>
+                                                    <th>Title</th>
+                                                    <th>Language</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="record_sent in sent_record | filter:searchText" ng-show="selectedTabDetail == {{record_sent.language_id}}">
+                                                    <td>{{  record_sent.id }}</td>
+                                                    <td>{{  record_sent.grade }}</td>
+                                                    <td>{{  record_sent.title}}</td>
+                                                    <td>{{  record_sent.language }}</td>
+                                                    <td>{{  record_sent.total }}</td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal (Pop up when detail button clicked) -->
+            <div class="modal fade" id="showReceiveDetailModal" tabindex="-1" role="dialog" aria-labelledby="showReceiveDetailModalLabel" aria-hidden="true">
+                <div class="modal-dialog" style="width: 90%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" >Detail of Shipment {{shipment_receive.title  }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" table-responsive">
+                                <table class="table table-striped table-bordered">
+
+                                    <tbody>
+                                    <tr>
+                                        <th>Shipment Title</th>
+                                        <td>{{ shipment_receive.title }}</td>
+
+                                        <th>Total Received</th>
+                                        <td>{{ receive_shipment.total_general }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shipment description </th>
+                                        <td>{{shipment_receive.description}}</td>
+
+                                        <th>Total Safe</th>
+                                        <td>{{ receive_shipment.total_safe }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Send date</th>
+                                        <td>{{shipment_receive.send_date}}</td>
+
+                                        <th>Total Damaged</th>
+                                        <td>{{ receive_shipment.damaged }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Receive date</th>
+                                        <td>{{shipment_receive.receive_date}}</td>
+
+                                        <th>Total Lost</th>
+                                        <td>{{ receive_shipment.lost }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th></th>
+                                        <td></td>
+
+                                        <th>Receive the Shipment</th>
+                                        <td>
+                                            <a href="javascript:void(0)" ng-click="loadReceivePage()" class="btn btn-sm btn-info btn-flat pull-left" ng-disabled="disable_recieve">Receive</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <div class="tabbable tabs-below" ng-init="selectedTabReceive= 1;">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li ng-class="{active: selectedTabReceive == {{receive_lang.language_id}}}"  ng-repeat="receive_lang in receive_record_langs">
+                                                <a href="javascript:void(0)" ng-click=" setSelectedTabReceive(receive_lang.language_id)">{{receive_lang.language}} </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" ng-repeat="receive_lang in receive_record_langs" ng-show="selectedTabReceive == {{receive_lang.language_id}}"
+                                             ng-class="animation"
+                                                >
+                                            <div class="table-responsive">
+                                                <table class="table no-margin">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Grade</th>
+                                                        <th>Title</th>
+                                                        <th>Language</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="record_receive in receive_record | filter:searchText" ng-show="selectedTabReceive == {{record_receive.language_id}}">
+                                                        <td>{{  record_receive.id }}</td>
+                                                        <td>{{  record_receive.grade }}</td>
+                                                        <td>{{  record_receive.title}}</td>
+                                                        <td>{{  record_receive.language }}</td>
+                                                        <td>{{  record_receive.total }}</td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- /.table-responsive -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal (Pop up when detail button clicked) -->
+            <!-- Style part for the model table Start  -->
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-spacing:0;}
+                .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+                .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+                .tg .tg-5y5n{background-color:#ecf4ff}
+                .tg .tg-iha4{background-color:#c8eac7}
+                .tg .tg-c57o{background-color:#ecf4ff;vertical-align:top}
+            </style>
+            <!-- Style part for the model table End  -->
+            <div class="modal fade" id="recieveModal" tabindex="-1" role="dialog" aria-labelledby="rechargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog"  style="width: 90%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="receiveModalLabel">Receive the Package</h4>
+                            <h3 class="modal-title" ng-repeat="node_balance in balance_list " ng-show="{{node_balance.active == 1}}">Your Current balance is : {{node_balance.total}}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" table-responsive">
+
+                                <form name="frmRecieve" class="form-horizontal" novalidate="">
+
+                                        <table class="table table-striped table-bordered">
+
+                                            <tbody>
+                                            <tr>
+                                                <th>Shipment Title</th>
+                                                <td>{{ shipment_receive.title }}</td>
+
+                                                <th>Total Received</th>
+                                                <td>{{ receive_shipment.total_general }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipment description </th>
+                                                <td>{{shipment_receive.description}}</td>
+
+                                                <th>Total Safe</th>
+                                                <td>{{ receive_shipment.total_safe }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Send date</th>
+                                                <td>{{shipment_receive.send_date}}</td>
+
+                                                <th>Total Damaged</th>
+                                                <td>{{ receive_shipment.damaged }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Receive date</th>
+                                                <td>{{shipment_receive.receive_date}}</td>
+
+                                                <th>Total Lost</th>
+                                                <td>{{ receive_shipment.lost }}</td>
+                                            </tr>
+                                            </tbody>
+
+                                        </table>
+                                    <!--<table class="table no-margin">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Grade</th>
+                                            <th>Title</th>
+                                            <th>Language</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="record_receive in receive_record | filter:searchText">
+                                            <td>{{  record_receive.id }}</td>
+                                            <td>{{  record_receive.grade }}</td>
+                                            <td>{{  record_receive.title}}</td>
+                                            <td>{{  record_receive.language }}</td>
+                                            <td>{{  record_receive.total }}</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>-->
+
+
+
+                                    <div class="tabbable tabs-below" ng-init="selectedTabReceive= 1;">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li ng-class="{active: selectedTabReceive == {{receive_lang.language_id}}}"  ng-repeat="receive_lang in receive_record_langs">
+                                                <a href="javascript:void(0)" ng-click=" setSelectedTabReceive(receive_lang.language_id)">{{receive_lang.language}} </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" ng-repeat="receive_lang in receive_record_langs" ng-show="selectedTabReceive == {{receive_lang.language_id}}"
+                                             ng-class="animation"
+                                                >
+                                            <div class="table-responsive">
+                                                <table class="table no-margin">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Grade</th>
+                                                        <th>Title</th>
+                                                        <th>Language</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="record_receive in receive_record | filter:searchText" ng-show="selectedTabReceive == {{record_receive.language_id}}">
+                                                        <td>{{  record_receive.id }}</td>
+                                                        <td>{{  record_receive.grade }}</td>
+                                                        <td>{{  record_receive.title}}</td>
+                                                        <td>{{  record_receive.language }}</td>
+                                                        <td>{{  record_receive.total }}</td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- /.table-responsive -->
+                                        </div>
+
+                                    </div>
+
+                                    <div ng-messages="true" role="alert">
+                                        <div ng-repeat="errorRecieveMessage in errorReceiveMessages">
+                                            <!-- use ng-message-exp for a message whose key is given by an expression -->
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <strong>{{ errorRecieveMessage }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group error">
+                                        <label for="recieve_date" class="col-sm-3 control-label">Receive Time </label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control has-error datepick" id="receive_date" name="recieve_date"  value=""
+                                                   ng-model="receive.recieve_date" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.recieve_date.$invalid && frmRecieve.recieve_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                        </div>
+                                    </div>
+                                    <!--<div class="form-group error">
+                                        <label for="total_safe" class="col-sm-3 control-label">Total Safe received </label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control has-error" id="total_safe" name="total_safe"  value=""
+                                                   ng-model="receive.total_safe" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.total_safe.$invalid && frmRecieve.total_safe.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group error">
+                                        <label for="total_general" class="col-sm-3 control-label">Total received </label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control has-error" id="total_general" name="total_general"  value=""
+                                                   ng-model="receive.total_general" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.total_general.$invalid && frmRecieve.total_general.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group error">
+                                        <label for="damaged" class="col-sm-3 control-label">Total damaged </label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control has-error" id="damaged" name="damaged"  value=""
+                                                   ng-model="receive.damaged" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.damaged.$invalid && frmRecieve.damaged.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group error">
+                                        <label for="lost" class="col-sm-3 control-label">Total Lost </label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control has-error" id="lost" name="lost"  value=""
+                                                   ng-model="receive.lost" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.lost.$invalid && frmRecieve.lost.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                        </div>
+                                    </div>-->
+                                    <!--  jingol1 -->
+                                    <!--<div class="col-md-6 pull-left" ng-repeat="grade in grade_list">
+                                        <table class="table no-margin tg">
+                                            <thead>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{2 + language_list.length}}">Form of {{ grade.grade.title}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{2 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                    <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" />
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Grade title</th>
+                                                <th  ng-repeat="lang in language_list">
+                                                    {{lang.title}}
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="grade_title in grade.titles">
+                                                <td>{{  grade_title.id }}</td>
+                                                <td>{{  grade_title.title }}</td>
+
+                                                <td ng-repeat="lang in language_list">
+                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                           ng-model="receive.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" ng-required="tablectr.checked">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecieve.receive.lang[grade_title.id+'_'+lang.id].$invalid && frmRecieve.receive.lang[grade_title.id+'_'+lang.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>-->
+
+
+                                    <div class="tabbable tabs-below" ng-init="selectedTabReceiveSend = 1;">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li ng-class="{active: selectedTab == {{grade.grade.id}}}"  ng-repeat="grade in grade_list">
+                                                <a href="javascript:void(0)" ng-click=" setSelectedTabReceiveSend(grade.grade.id)">{{grade.grade.title}} </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" ng-repeat="grade in grade_list" ng-show="selectedTabReceiveSend == {{grade.grade.id}}"
+                                             ng-class="animation"
+                                                >
+                                            <table class="table no-margin tg">
+                                                <thead>
+                                                <tr>
+                                                    <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">
+                                                        <h5>
+                                                            Form of {{ grade.grade.title}}
+                                                        </h5>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                        <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" ng-change="checkBoxchanged(grade.grade.id , tablectr.checked)" />
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Grade title</th>
+                                                    <th  ng-repeat="lang in language_list">
+                                                        {{lang.title}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="grade_title in grade.titles">
+                                                    <td>{{  grade_title.id }}</td>
+                                                    <td>{{  grade_title.title }}</td>
+
+                                                    <td ng-repeat="lang in language_list">
+                                                        <style>
+                                                            .inner_table_receive
+                                                            {
+                                                                border-collapse:collapse;
+                                                                border-color:#000000;
+                                                                border-style:solid;
+                                                                border-width:2px;
+                                                            }
+
+                                                            .inner_table_receive td
+                                                            {
+                                                                border-color:lightgoldenrodyellow; /*grey*/
+                                                                border-style:solid;
+                                                                border-width:1px;
+                                                            }
+
+                                                            .inner_table_receive th
+                                                            {
+                                                                border-color:lightgoldenrodyellow; /*grey*/
+                                                                border-style:solid;
+                                                                border-width:1px;
+                                                            }
+                                                        </style>
+                                                        <table style="width: 100%" class="inner_table_receive">
+                                                            <tr>
+                                                                <th>
+                                                                    Fine
+                                                                </th>
+                                                                <th>
+                                                                    Damaged
+                                                                </th>
+                                                                <th>
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                                           ng-model="receive.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" >
+                                                                    <span class="help-inline"
+                                                                          ng-show="frmRecieve.receive.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id].$invalid && frmRecieve.receive.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id+'_dmg'}}" placeholder="0" value=""
+                                                                           ng-model="receive.lang_dmg[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" >
+                                                                    <span class="help-inline"
+                                                                          ng-show="frmRecieve.receive.lang_dmg[grade_title.id+'_'+lang.id+'_'+grade.grade.id].$invalid && frmRecieve.receive.lang_dmg[grade_title.id+'_'+lang.id+'_'+grade.grade.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                                </td>
+                                                                <td>
+                                                                    {{receive.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id] + receive.lang_dmg[grade_title.id+'_'+lang.id+'_'+grade.grade.id]}}
+                                                                </td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </td>
+
+                                                    <td>
+                                                        <select name="{{'other_lang_'+grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" class="form-control" ng-model="receive.other_lang[grade_title.id+'_'+grade.grade.id]" ng-required="false">
+                                                            <option value="0"> Select language</option>
+                                                            <option ng-repeat="other_lang in lang_full_list" value="{{other_lang.id}}"> {{other_lang.title}}</option>
+                                                        </select>
+
+
+                                                        <table style="width: 100%" class="inner_table_receive">
+                                                            <tr>
+                                                                <th>
+                                                                    Fine
+                                                                </th>
+                                                                <th>
+                                                                    Damaged
+                                                                </th>
+                                                                <th>
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+receive.other_lang[grade_title.id+'_'+grade.grade.id]}}" name="{{grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id}}" placeholder="0" value=""
+                                                                           ng-model="receive.lang[grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]" ng-readonly="!tablectr.checked" ng-required="tablectr.checked">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" class="form-control has-error" id="{{'dmg_'+grade_title.id+'_'+receive.other_lang[grade_title.id+'_'+grade.grade.id]}}" name="{{'dmg_'+grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id}}" placeholder="0" value=""
+                                                                           ng-model="receive.lang_dmg[grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]" ng-readonly="!tablectr.checked" ng-required="tablectr.checked">
+                                                                </td>
+                                                                <td>
+                                                                    {{receive.lang[grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id] + receive.lang_dmg[grade_title.id+'_'+ receive.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]}}
+                                                                </td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="btn-save" ng-click="submitReceive()" ng-disabled="frmRecieve.$invalid">Recieve the Shipment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal (Pop up when detail button clicked) -->
+            <!-- Style part for the model table Start  -->
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-spacing:0;}
+                .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+                .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+                .tg .tg-5y5n{background-color:#ecf4ff}
+                .tg .tg-iha4{background-color:#c8eac7}
+                .tg .tg-c57o{background-color:#ecf4ff;vertical-align:top}
+            </style>
+            <!-- Style part for the model table End  -->
+            <div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
+                <div class="modal-dialog"  style="width: 90%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="sendModalLabel">Send new shipment</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" table-responsive">
+                                <form name="frmSendShipment" class="form-horizontal" novalidate="">
+
+
+                                    <div ng-messages="true" role="alert">
+                                        <div ng-repeat="errorMessage in errorMessages">
+                                            <!-- use ng-message-exp for a message whose key is given by an expression -->
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <strong>{{ errorMessage }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group error">
+                                        <label for="title" class="col-sm-3 control-label">Shipment title</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control has-error" id="title" name="title" placeholder="Shipment Title" value=""
+                                                   ng-model="send_shipment.title" ng-required="true">
+                                             <span class="help-inline"
+                                                   ng-show="frmSendShipment.title.$invalid && frmSendShipment.title.$touched">We can't let you continue without providing title for the shipment</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group error">
+                                        <label for="title" class="col-sm-3 control-label">Shipment description</label>
+                                        <div class="col-sm-9">
+                                            <textarea type="text" class="form-control has-error" id="description" name="title" placeholder="Shipment Description" value=""
+                                                   ng-model="send_shipment.description" ng-required="false">
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group error">
+                                        <label for="level_to" class="col-sm-3 control-label">Shipment recipient level</label>
+                                        <div class="col-sm-9">
+                                            <select name="level_to" class="form-control" ng-model="send_shipment.level_to" ng-required="true" ng-change="level_changed(send_shipment.level_to)">
+                                                <option value="0"> Select recipient level</option>
+                                                <option ng-repeat="to_level in shipment_receive_level" value="{{to_level.id}}"> {{to_level.title}}</option>
+                                            </select>
+                                                <span class="help-inline"
+                                                      ng-show="send_shipment.level_to.$invalid && send_shipment.level_to.$touched">We can't let you continue without selecting one recipient for this shipment</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group error">
+                                        <label for="to" class="col-sm-3 control-label">Shipment recipient</label>
+
+                                        <div class="col-sm-9">
+                                            <div
+                                                    angucomplete-alt id="ex1"
+                                                    placeholder="Search recipient"
+                                                    maxlength="50"
+                                                    pause="100"
+                                                    selected-object="send_shipment.to"
+                                                    ng-required="true"
+                                                    local-data="to_node_list"
+                                                    search-fields="title"
+                                                    title-field="title"
+                                                    minlength="1"
+                                                    input-class="form-control form-control-small"
+                                                    match-class="highlight"
+                                                    >
+                                            </div>
+                                           <!-- <select name="to" class="form-control" ng-model="send_shipment.to" ng-required="true">
+                                                <option value="0"> Select recipient</option>
+                                                <option ng-repeat="to_node in to_node_list" value="{{to_node.id}}"> {{to_node.title}}</option>
+                                            </select>-->
+                                                <span class="help-inline"
+                                                      ng-show="send_shipment.to.$invalid && send_shipment.to.$touched">We can't let you continue without selecting one recipient for this shipment</span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group error">
+                                        <label for="to" class="col-sm-3 control-label">Shipment send time</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control has-error datepick" id="send_date" name="send_date"  value=""
+                                                   ng-model="send_shipment.send_date" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="send_shipment.send_date.$invalid && send_shipment.send_date.$touched">We can't let you continue without providing the send date for this shipment</span>
+                                        </div>
+                                    </div>
+                                    <div class="tabbable tabs-below" ng-init="selectedTab = 1;">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li ng-class="{active: selectedTab == {{grade.grade.id}}}"  ng-repeat="grade in grade_list">
+                                                <a href="javascript:void(0)" ng-click=" setSelectedTab(grade.grade.id)">{{grade.grade.title}} </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" ng-repeat="grade in grade_list" ng-show="selectedTab == {{grade.grade.id}}"
+                                             ng-class="animation"
+                                                >
+                                            <table class="table no-margin tg">
+                                                <thead>
+                                                <tr>
+                                                    <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">
+                                                        <h5>
+                                                            Form of {{ grade.grade.title}}
+                                                        </h5>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                        <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" />
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Grade title</th>
+                                                    <th  ng-repeat="lang in language_list">
+                                                        {{lang.title}}
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="grade_title in grade.titles">
+                                                    <td>{{  grade_title.id }}</td>
+                                                    <td>{{  grade_title.title }}</td>
+
+                                                    <td ng-repeat="lang in language_list">
+                                                        <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                               ng-model="send_shipment.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" >
+                                                    <span class="help-inline"
+                                                      ng-show="send_shipment.send_shipment.lang[grade_title.id+'_'+lang.id].$invalid && send_shipment.send_shipment.lang[grade_title.id+'_'+lang.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                    </td>
+
+                                                    <td>
+                                                        <select name="{{'other_lang_'+grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" class="form-control" ng-model="send_shipment.other_lang[grade_title.id+'_'+grade.grade.id]" ng-required="false">
+                                                            <option value="0"> Select language</option>
+                                                            <option ng-repeat="other_lang in lang_full_list" value="{{other_lang.id}}"> {{other_lang.title}}</option>
+                                                        </select>
+                                                        <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+send_shipment.other_lang[grade_title.id+'_'+grade.grade.id]}}" name="{{grade_title.id+'_'+ send_shipment.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id}}" placeholder="0" value=""
+                                                               ng-model="send_shipment.lang[grade_title.id+'_'+ send_shipment.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]" ng-disabled="!tablectr.checked" ng-required="tablectr.checked">
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                   <!-- <div class="col-md-6 pull-left" ng-repeat="grade in grade_list">
+
+                                    </div>-->
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="btn-save" ng-click="sendShipment()" ng-disabled="frmSendShipment.$invalid">Send the shipment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- balance part -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Recently transactions</h3>
+
+                    <div class="box-tools pull-left">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        <li class="item" ng-repeat="node_balance in balance_list ">
+                            <div class="product-info">
+                                <a href="javascript:void(0)" class="product-title">{{ node_balance.from_title }} - {{ node_balance.to_title }}
+                                    <span class="label label-success" ng-show="{{node_balance.active == 1}}">Current Balance</span>
+                                    <span class="label label-warning pull-right">{{node_balance.total}}</span></a>
+                            <span class="product-description">
+                                <span class="label label-success" ng-show="{{node_balance.type == 2}}">
+                                    <i class="fa fa-cloud-download"></i>
+                                </span>
+                                <span class="label label-warning" ng-show="{{node_balance.type == 1}}">
+                                    <i class="fa fa-cloud-upload"></i>
+                                </span>
+                                </br>
+                                Previous balance: {{node_balance.previous_total}}
+                                </br>
+                                Transaction amount: {{node_balance.amount}}
+                            </span>
+                            </div>
+                        </li>
+                        <!--&lt;!&ndash; /.item &ndash;&gt;
+                        <li class="item">
+                            <div class="product-img">
+                                <img src="dist/img/default-50x50.gif" alt="Product Image">
+                            </div>
+                            <div class="product-info">
+                                <a href="javascript:void(0)" class="product-title">Bicycle
+                                    <span class="label label-info pull-right">$700</span></a>
+                        <span class="product-description">
+                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                        </span>
+                            </div>
+                        </li>-->
+                        <!-- /.item -->
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+
+                <!-- /.box-footer -->
+            </div>
+        </div>
+        <div class="col-md-12" ng-show="false">
+            <!-- balance part -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Recharge the store</h3>
+
+                    <div class="box-tools pull-left">
+                        <a href="javascript:void(0)" ng-click="loadRechargePage()" class="btn btn-sm btn-info btn-flat pull-left">Make new receipt </a>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        <li class="item" ng-repeat="node_receipt in receipt_list ">
+                            <div class="product-info">
+                                <a href="javascript:void(0)" class="product-title">{{ node_receipt.From_title }} - {{ node_receipt.To_title }}
+                                    </a>
+                            <span class="product-description">
+                                </br>
+                                Title: {{node_receipt.title}}
+                                </br>
+                                Description: {{node_receipt.description}}
+                            </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+
+                <!-- /.box-footer -->
+            </div>
+        </div>
+
+        <!-- Modal (Pop up when detail button clicked) -->
+        <!-- Style part for the model table Start  -->
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg .tg-5y5n{background-color:#ecf4ff}
+            .tg .tg-iha4{background-color:#c8eac7}
+            .tg .tg-c57o{background-color:#ecf4ff;vertical-align:top}
+        </style>
+        <!-- Style part for the model table End  -->
+        <div class="modal fade" id="rechargeModal" tabindex="-1" role="dialog" aria-labelledby="rechargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog"  style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="rechargeModalLabel">Recharge your balance</h4>
+                        <h3 class="modal-title" ng-repeat="node_balance in balance_list " ng-show="{{node_balance.active == 1}}">Your Current balance is : {{node_balance.total}}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class=" table-responsive">
+                            <form name="frmRecharge" class="form-horizontal" novalidate="">
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Receipt title</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error" id="rechargetitle" name="title" placeholder="Receipt Title" value=""
+                                               ng-model="recharge.title" ng-required="true">
+                                             <span class="help-inline"
+                                                   ng-show="frmRecharge.title.$invalid && frmRecharge.title.$touched">We can't let you continue without providing title for the receipt</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Receipt description</label>
+                                    <div class="col-sm-9">
+                                            <textarea type="text" class="form-control has-error" id="rechargedescription" name="rechargedescription" placeholder="Receipt Description" value=""
+                                                      ng-model="recharge.description" ng-required="false">
+                                            </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="to" class="col-sm-3 control-label">Vendor</label>
+                                    <div class="col-sm-9">
+                                        <select name="to" class="form-control" ng-model="recharge.vendor" ng-required="true">
+                                            <option value="0"> Select Vendor</option>
+                                            <option ng-repeat="vendor in vendor_list" value="{{vendor.id}}"> {{vendor.title}}</option>
+                                        </select>
+                                                <span class="help-inline"
+                                                      ng-show="frmRecharge.vendor.$invalid && frmRecharge.vendor.$touched">We can't let you continue without selecting one recipient for this shipment</span>
+                                    </div>
+                                </div>
+                                <div class="form-group error">
+                                    <label for="to" class="col-sm-3 control-label">Receipt send time</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error datepick" id="recharge_date" name="recieve_date"  value=""
+                                               ng-model="recharge.recieve_date" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecharge.recieve_date.$invalid && frmRecharge.recieve_date.$touched">We can't let you continue without providing the send date for this shipment</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pull-left" ng-repeat="grade in grade_list">
+                                    <table class="table no-margin tg">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center;" class="tg-iha4" colspan="{{2 + language_list.length}}">Form of {{ grade.grade.title}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-align: center;" class="tg-iha4" colspan="{{2 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" />
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Grade title</th>
+                                            <th  ng-repeat="lang in language_list">
+                                                {{lang.title}}
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="grade_title in grade.titles">
+                                            <td>{{  grade_title.id }}</td>
+                                            <td>{{  grade_title.title }}</td>
+
+                                            <td ng-repeat="lang in language_list">
+                                                <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                       ng-model="recharge.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" ng-required="tablectr.checked">
+                                                <span class="help-inline"
+                                                      ng-show="frmRecharge.recharge.lang[grade_title.id+'_'+lang.id].$invalid && frmRecharge.recharge.lang[grade_title.id+'_'+lang.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-save" ng-click="submitReceipt()" ng-disabled="frmRecharge.$invalid">Send the receipt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-info" ng-show="has_beneficiary == 1">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Delivery to Beneficiary</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="to_beneficiary in to_beneficiary_list | filter:searchText">
+                                <td>{{  to_beneficiary.title }}</td>
+                                <td>{{  to_beneficiary.description }}</td>
+                                <td>{{  to_beneficiary.From_title }}</td>
+                                <td>Beneficiary</td>
+                                <td align="center">
+                                    <a class="btn btn-sm btn-info btn-flat" ng-click="loadDetailSentPage(package_sent.id)"><i class="fa fa-eye"></i> View detail</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" ng-click="loadToBeneficiaryPage()" class="btn btn-sm btn-info btn-flat pull-left">Deliver material</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="box box-info" ng-show="has_beneficiary == 1">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Received from Beneficiary</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="from_beneficiary in from_beneficiary_list | filter:searchText">
+                                <td>{{  from_beneficiary.title }}</td>
+                                <td>{{  from_beneficiary.description }}</td>
+                                <td>Beneficiary</td>
+                                <td>{{  from_beneficiary.From_title }}</td>
+                                <td align="center">
+                                    <a class="btn btn-sm btn-info btn-flat" ng-click="loadDetailSentPage(package_sent.id)"><i class="fa fa-eye"></i> View detail</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" ng-click="loadFromBenficiaryPage()" class="btn btn-sm btn-info btn-flat pull-left">Receive material from Beneficiary</a>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+
+
+
+        <!-- Modal (Pop up when detail button clicked) -->
+        <!-- Style part for the model table Start  -->
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg .tg-5y5n{background-color:#ecf4ff}
+            .tg .tg-iha4{background-color:#c8eac7}
+            .tg .tg-c57o{background-color:#ecf4ff;vertical-align:top}
+        </style>
+        <!-- Style part for the model table End  -->
+        <div class="modal fade" id="toBeneficiaryModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
+            <div class="modal-dialog"  style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="sendModalLabel">Deliver the Shipment to Beneficiary</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class=" table-responsive">
+                            <form name="frmToBeneficiaryShipment" class="form-horizontal" novalidate="">
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Shipment title</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error" id="title" name="title" placeholder="Shipment Title" value=""
+                                               ng-model="toBeneficiary.title" ng-required="true">
+                                             <span class="help-inline"
+                                                   ng-show="frmToBeneficiaryShipment.title.$invalid && frmToBeneficiaryShipment.title.$touched">We can't let you continue without providing title for the shipment</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Shipment description</label>
+                                    <div class="col-sm-9">
+                                            <textarea type="text" class="form-control has-error" id="description" name="title" placeholder="Shipment Description" value=""
+                                                      ng-model="toBeneficiary.description" ng-required="false">
+                                            </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="to" class="col-sm-3 control-label">Shipment send time</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error datepick" id="send_date" name="send_date"  value=""
+                                               ng-model="toBeneficiary.send_date" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmToBeneficiaryShipment.send_date.$invalid && frmToBeneficiaryShipment.send_date.$touched">We can't let you continue without providing the send date for this shipment</span>
+                                    </div>
+                                </div>
+                                <div class="tabbable tabs-below" ng-init="selectedTab = 1;">
+                                    <ul class="nav nav-tabs nav-justified">
+                                        <li ng-class="{active: selectedTab == {{grade.grade.id}}}"  ng-repeat="grade in grade_list">
+                                            <a href="javascript:void(0)" ng-click=" setSelectedTab(grade.grade.id)">{{grade.grade.title}} </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" ng-repeat="grade in grade_list" ng-show="selectedTab == {{grade.grade.id}}"
+                                         ng-class="animation"
+                                            >
+                                        <table class="table no-margin tg">
+                                            <thead>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">
+                                                    <h5>
+                                                        Form of {{ grade.grade.title}}
+                                                    </h5>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                    <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" />
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Grade title</th>
+                                                <th  ng-repeat="lang in language_list">
+                                                    {{lang.title}}
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="grade_title in grade.titles">
+                                                <td>{{  grade_title.id }}</td>
+                                                <td>{{  grade_title.title }}</td>
+
+                                                <td ng-repeat="lang in language_list">
+                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                           ng-model="toBeneficiary.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" >
+                                                    <span class="help-inline"
+                                                          ng-show="frmToBeneficiaryShipment.toBeneficiary.lang[grade_title.id+'_'+lang.id].$invalid && frmToBeneficiaryShipment.toBeneficiary.lang[grade_title.id+'_'+lang.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                </td>
+
+                                                <td>
+                                                    <select name="{{'other_lang_'+grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" class="form-control" ng-model="toBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id]" ng-required="false">
+                                                        <option value="0"> Select language</option>
+                                                        <option ng-repeat="other_lang in lang_full_list" value="{{other_lang.id}}"> {{other_lang.title}}</option>
+                                                    </select>
+                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+toBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id]}}" name="{{grade_title.id+'_'+ toBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id}}" placeholder="0" value=""
+                                                           ng-model="toBeneficiary.lang[grade_title.id+'_'+ toBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]" ng-disabled="!tablectr.checked" ng-required="tablectr.checked">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <!-- <div class="col-md-6 pull-left" ng-repeat="grade in grade_list">
+
+                                 </div>-->
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-save" ng-click="sendToBeneficiaryShipment()" ng-disabled="frmToBeneficiaryShipment.$invalid">Send the shipment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal (Pop up when detail button clicked) -->
+        <!-- Style part for the model table Start  -->
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            .tg .tg-5y5n{background-color:#ecf4ff}
+            .tg .tg-iha4{background-color:#c8eac7}
+            .tg .tg-c57o{background-color:#ecf4ff;vertical-align:top}
+        </style>
+        <!-- Style part for the model table End  -->
+        <div class="modal fade" id="fromBeneficiaryModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
+            <div class="modal-dialog"  style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="sendModalLabel">Deliver the Shipment from Beneficiary</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class=" table-responsive">
+                            <form name="frmFromBeneficiaryShipment" class="form-horizontal" novalidate="">
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Shipment title</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error" id="title" name="title" placeholder="Shipment Title" value=""
+                                               ng-model="fromBeneficiary.title" ng-required="true">
+                                             <span class="help-inline"
+                                                   ng-show="frmFromBeneficiaryShipment.title.$invalid && frmFromBeneficiaryShipment.title.$touched">We can't let you continue without providing title for the shipment</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="title" class="col-sm-3 control-label">Shipment description</label>
+                                    <div class="col-sm-9">
+                                            <textarea type="text" class="form-control has-error" id="description" name="title" placeholder="Shipment Description" value=""
+                                                      ng-model="fromBeneficiary.description" ng-required="false">
+                                            </textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group error">
+                                    <label for="to" class="col-sm-3 control-label">Shipment send time</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control has-error datepick" id="send_date" name="send_date"  value=""
+                                               ng-model="fromBeneficiary.send_date" ng-required="true">
+                                                <span class="help-inline"
+                                                      ng-show="frmFromBeneficiaryShipment.send_date.$invalid && frmFromBeneficiaryShipment.send_date.$touched">We can't let you continue without providing the send date for this shipment</span>
+                                    </div>
+                                </div>
+                                <div class="tabbable tabs-below" ng-init="selectedTab = 1;">
+                                    <ul class="nav nav-tabs nav-justified">
+                                        <li ng-class="{active: selectedTab == {{grade.grade.id}}}"  ng-repeat="grade in grade_list">
+                                            <a href="javascript:void(0)" ng-click=" setSelectedTab(grade.grade.id)">{{grade.grade.title}} </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" ng-repeat="grade in grade_list" ng-show="selectedTab == {{grade.grade.id}}"
+                                         ng-class="animation"
+                                            >
+                                        <table class="table no-margin tg">
+                                            <thead>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">
+                                                    <h5>
+                                                        Form of {{ grade.grade.title}}
+                                                    </h5>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th style="text-align: center;" class="tg-iha4" colspan="{{3 + language_list.length}}">Hide this grade {{ grade.grade.title}}, form the send shipment form!
+                                                    <input type="checkbox" ng-model="tablectr.checked" id="controltable_{{grade.grade.id}}" name="controltable_{{grade.grade.id}}" />
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Grade title</th>
+                                                <th  ng-repeat="lang in language_list">
+                                                    {{lang.title}}
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="grade_title in grade.titles">
+                                                <td>{{  grade_title.id }}</td>
+                                                <td>{{  grade_title.title }}</td>
+
+                                                <td ng-repeat="lang in language_list">
+                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+lang.id}}" name="{{grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" placeholder="0" value=""
+                                                           ng-model="fromBeneficiary.lang[grade_title.id+'_'+lang.id+'_'+grade.grade.id]" ng-disabled="!tablectr.checked" >
+                                                    <span class="help-inline"
+                                                          ng-show="frmFromBeneficiaryShipment.fromBeneficiary.lang[grade_title.id+'_'+lang.id].$invalid && frmFromBeneficiaryShipment.fromBeneficiary.lang[grade_title.id+'_'+lang.id].$touched">We can't let you continue without providing the amount for this item in the shipment.</span>
+                                                </td>
+
+                                                <td>
+                                                    <select name="{{'other_lang_'+grade_title.id+'_'+lang.id+'_'+grade.grade.id}}" class="form-control" ng-model="fromBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id]" ng-required="false">
+                                                        <option value="0"> Select language</option>
+                                                        <option ng-repeat="other_lang in lang_full_list" value="{{other_lang.id}}"> {{other_lang.title}}</option>
+                                                    </select>
+                                                    <input type="number" class="form-control has-error" id="{{grade_title.id+'_'+fromBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id]}}" name="{{grade_title.id+'_'+ fromBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id}}" placeholder="0" value=""
+                                                           ng-model="fromBeneficiary.lang[grade_title.id+'_'+ fromBeneficiary.other_lang[grade_title.id+'_'+grade.grade.id] +'_'+grade.grade.id]" ng-disabled="!tablectr.checked" ng-required="tablectr.checked">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <!-- <div class="col-md-6 pull-left" ng-repeat="grade in grade_list">
+
+                                 </div>-->
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn-save" ng-click="sendFromBeneficiaryShipment()" ng-disabled="frmFromBeneficiaryShipment.$invalid">Receive the shipment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+

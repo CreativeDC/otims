@@ -1,0 +1,29 @@
+array (
+  'send_date' => '07/24/2019',
+  'title' => 'test2',
+  'level_to' => '13',
+  'province_to' => '1',
+  'district_to' => '4',
+  'to' => '19556',
+  'lang' => 
+  array (
+    '4_1_1' => 100,
+    '4_2_1' => 100,
+  ),
+  'sent_grades' => 
+  array (
+    0 => NULL,
+    1 => true,
+    2 => false,
+    3 => false,
+    4 => false,
+    5 => false,
+    6 => false,
+    7 => false,
+    8 => false,
+    9 => false,
+    10 => false,
+    11 => false,
+    12 => false,
+  ),
+)

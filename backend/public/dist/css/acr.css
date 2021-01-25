@@ -1,0 +1,26 @@
+#content-overlay {
+    background-color: rgba(50,50,50,0.8);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000000;
+    display: none;
+}
+#acr-title-h4{font-size:20px !important;}
+
+/* Extra Small Devices, Phones */
+	@media only screen and (min-width : 480px)and(max-width:767px){
+	.main-header .logo .logo-lg{margin-bottom:-18px !important;}
+	.main-header .logo .logo-lg img{width:30% !important;display:inline-block !important;}
+	#acr-title{left:28% !important;top:5% !important;}
+	#acr-title-h4{font-size:16px !important}
+	}
+ 
+	/* Small Devices, Tablets */
+	@media screen and (min-width : 768px) and (max-width:950px){	
+	#acr-title{left:18% !important;top:5% !important;}
+	#acr-title-h4{font-size:20px !important}
+	/*.skin-blue .main-header .logo{height:50% !important;}*/
+	}
+	
+	

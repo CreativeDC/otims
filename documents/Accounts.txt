@@ -1,0 +1,5 @@
+Email: admin@example.com
+Password: otims@Test
+
+Email: vendor@example.com
+Password: otims@Test

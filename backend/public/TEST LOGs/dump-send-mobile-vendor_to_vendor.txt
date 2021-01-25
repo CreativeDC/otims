@@ -1,0 +1,31 @@
+array (
+  'title' => 'test5',
+  'description' => '',
+  'sent_grades' => 
+  array (
+    0 => NULL,
+    1 => true,
+    2 => false,
+    3 => false,
+    4 => false,
+    5 => false,
+    6 => false,
+    7 => false,
+    8 => false,
+    9 => false,
+    10 => false,
+    11 => false,
+    12 => false,
+  ),
+  'level_to' => '17',
+  'province_to' => '1',
+  'district_to' => '4',
+  'to' => '10778',
+  'send_date' => '2019-07-24',
+  'lang' => 
+  array (
+    '4_1_1' => '100',
+    '4_2_1' => '100',
+  ),
+  'api_token' => 'Ze182k3UrAfn1MyIPUFJPsidDEuk3vC4BdVdywjL8yfLSX23f6jNQhIoKFh6',
+)

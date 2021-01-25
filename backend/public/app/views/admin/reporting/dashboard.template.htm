@@ -1,0 +1,1286 @@
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h1 class="box-title">Distribution Reports</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <section class="invoice" style="border:none">
+            <!-- form start -->
+            <table style="undefined; table-layout: fixed; width: 100%">
+
+                <tr>
+                    <td class="tg-yw4l" style="width: 10%">
+                        <label class=" control-label">Report Type</label>
+                    </td>
+                    <td class="tg-yw4l" style="width: 20%">
+                        <select name="level_to" class="form-control" ng-model="report_type_selected" ng-required="true" ng-change="report_changed(report_type_selected)">
+                            <option value="0">Select Report</option>
+                            <option ng-repeat="report_type in report_types" value="{{report_type.id}}"> {{report_type.title}}</option>
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+        </section>
+    </div>
+
+
+
+
+    <div class="box box-primary" ng-show="report_type_selected == 1">
+        <div class="box-header with-border">
+            <h1 class="box-title">{{report_types[report_type_selected]['title']}}</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <form name="frmSearchShipment" class="form-horizontal" novalidate="">
+                        <table  style="undefined; table-layout: fixed; width: 100%">
+                            <!--<tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Province</label>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <div
+                                            angucomplete-alt id="ex1"
+                                            placeholder="Select Province"
+                                            maxlength="100"
+                                            pause="100"
+                                            selected-object="search_node.province"
+                                            ng-required="false"
+                                            local-data="province_list"
+                                            search-fields="en_name"
+                                            title-field="en_name"
+                                            minlength="1"
+                                            input-class="form-control form-control-small"
+                                            match-class="highlight"
+                                            >
+                                    </div>
+                                </td>
+                            </tr>-->
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date From: </label>
+                                    <input type="text" class="form-control has-error datepick" id="from_date" name="from_date"  value=""
+                                           ng-model="search_node.from_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchShipment.from_date.$invalid && frmSearchShipment.from_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date To: </label>
+                                    <input type="text" class="form-control has-error datepick" id="to_date" name="to_date"  value=""
+                                           ng-model="search_node.to_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchShipment.to_date.$invalid && frmSearchShipment.to_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="searchReport()" ng-disabled="frmSearchShipment.$invalid">Search</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+    <div class="box box-primary"  ng-show="report_type_selected == 1">
+        <div class="box-header with-border">
+            <h1 class="box-title">Report Result</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-ukfe{background-color:#f2f8ff;vertical-align:top}
+                    .tg .tg-ftk3{background-color:#f2f8ff}
+                    .tg .tg-yw4l{vertical-align:top}
+                    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+                <div class="tg-wrap">
+                    <table class="tg"  style="undefined; table-layout: fixed; width: 100%" >
+                        <tr>
+                            <th class="tg-ftk3" colspan="10" style=" text-align: center;">
+                                <h4>
+                                    Ministry of Education
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="10" style=" text-align: center;">
+                                <h4>
+                                    Province-wise Textbooks Reciept Report
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="10" style=" text-align: center;">
+                                <h4>
+                                    Report for the Period: __{{search_node.from_date}}__to__{{search_node.to_date}}__
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    S. No.
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Province
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Grade
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Language
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Title
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" colspan="3">
+                                <h5>
+                                    Quantity Received
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Distributed
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Available Stock
+                                </h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Received
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Damaged
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>
+                        </tr>
+                        <tbody ng-repeat="province_list_item in report_list_province">
+                            <tr ng-repeat="report_item_province in province_list_item">
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.id}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.province_name}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.grade}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.language}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.title}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.Total_recieved}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.total_dmg}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.total_lost}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.total_sent}}
+                                    </b>
+                                </td>
+                                <td class="tg-yw4l">
+                                    <b>
+                                        {{report_item_province.avalaible_blance}}
+                                    </b>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="box box-primary" ng-show="report_type_selected == 2">
+        <div class="box-header with-border">
+            <h1 class="box-title">{{report_types[report_type_selected]['title']}}</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <form name="frmSearchSentShipment" class="form-horizontal" novalidate="">
+                        <table  style="undefined; table-layout: fixed; width: 100%">
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Province</label>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <select name="province" class="form-control" ng-model="sent_search_node.province" ng-required="true">
+                                        <option value="0"> Select Province</option>
+                                        <!-- <option ng-repeat="province in province_list" value="{{province.id}}"> {{province.en_name}}</option> -->
+
+                                        <option ng-if="locale_string==='en'" ng-repeat="province in province_list" value="{{province.id}}"> {{province.en_name}}
+                                        </option>
+                                        
+                                        <option ng-if="locale_string==='fa' || locale_string==='ps'" ng-repeat="province in province_list"
+                                            value="{{province.id}}"> {{province.dr_name}}
+                                        </option>
+
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date From: </label>
+                                    <input type="text" class="form-control has-error datepick" id="from_date" name="from_date"  value=""
+                                           ng-model="sent_search_node.from_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.from_date.$invalid && frmSearchSentShipment.from_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date To: </label>
+                                    <input type="text" class="form-control has-error datepick" id="to_date" name="to_date"  value=""
+                                           ng-model="sent_search_node.to_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.to_date.$invalid && frmSearchSentShipment.to_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="searchReport_sent()" ng-disabled="frmSearchSentShipment.$invalid">Search</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+    <div class="box box-primary"  ng-show="report_type_selected == 2">
+        <div class="box-header with-border">
+            <h1 class="box-title">Report Result</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-ukfe{background-color:#f2f8ff;vertical-align:top}
+                    .tg .tg-ftk3{background-color:#f2f8ff}
+                    .tg .tg-yw4l{vertical-align:top}
+                    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+                <div class="tg-wrap">
+                    <table class="tg"  style="undefined; table-layout: fixed; width: 100%" >
+                        <tr>
+                            <th class="tg-ftk3" colspan="13" style=" text-align: center;">
+                                <h4>
+                                    Ministry of Education
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="13" style=" text-align: center;">
+                                <h4>
+                                    District-wise Textbooks Report
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="13" style=" text-align: center;">
+                                <h4>
+                                    Report for the Period: __{{sent_search_node.from_date}}__to__{{sent_search_node.to_date}}__
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    S. No.
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Province
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    District
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    School
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Grade
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Language
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Title
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Sent
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" colspan="3">
+                                <h5>
+                                    Quantity Received
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Distributed
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Available Stock
+                                </h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Received
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Damaged
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>
+                        </tr>
+                        <tbody ng-repeat="province_list_item in report_list_province_sent">
+                        <tr ng-repeat="report_item_province in province_list_item">
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.id}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.province_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.district_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.School_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.grade}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.language}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.title}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_sent}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_recieved}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_damaged}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_lost}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_to_student}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.avalaible_blance}}
+                                </b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="box box-primary" ng-show="report_type_selected == 3">
+        <div class="box-header with-border">
+            <h1 class="box-title">{{report_types[report_type_selected]['title']}}</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <form name="frmSearchSentShipment" class="form-horizontal" novalidate="">
+                        <table  style="undefined; table-layout: fixed; width: 100%">
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Province</label>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <select name="province" class="form-control" ng-model="school_search_node.province" ng-required="true" ng-change="province_changed(school_search_node.province)">>
+                                        <option value="0">Select Province</option>
+
+                                        <option ng-if="locale_string==='en'" ng-repeat="province in province_list" value="{{province.id}}"> {{province.en_name}}</option>
+
+                                        <option ng-if="locale_string==='fa' || locale_string==='ps'" ng-repeat="province in province_list" value="{{province.id}}"> {{province.dr_name}}
+                                        </option>
+
+                                    </select>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">District</label>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <div ng-if="locale_string==='en'"
+                                            angucomplete-alt id="ex1"
+                                            placeholder="Select District"
+                                            maxlength="100"
+                                            pause="100"
+                                            selected-object="school_search_node.district"
+                                            ng-required="false"
+                                            local-data="district_list"
+                                            search-fields="en_name"
+                                            title-field="en_name"
+                                            minlength="1"
+                                            input-class="form-control form-control-small"
+                                            match-class="highlight"
+                                            >
+                                    </div>
+
+                                    <div ng-if="locale_string==='fa' || locale_string==='ps'" angucomplete-alt id="ex1" placeholder="Select District" maxlength="100" pause="100"
+                                        selected-object="school_search_node.district" ng-required="false" local-data="district_list" search-fields="dr_name"
+                                        title-field="dr_name" minlength="1" input-class="form-control form-control-small" match-class="highlight">
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date From: </label>
+                                    <input type="text" class="form-control has-error datepick" id="from_date" name="from_date"  value=""
+                                           ng-model="school_search_node.from_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.from_date.$invalid && frmSearchSentShipment.from_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date To: </label>
+                                    <input type="text" class="form-control has-error datepick" id="to_date" name="to_date"  value=""
+                                           ng-model="school_search_node.to_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.to_date.$invalid && frmSearchSentShipment.to_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="searchReport_school()" ng-disabled="frmSearchSentShipment.$invalid">Search</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-primary"  ng-show="report_type_selected == 3">
+        <div class="box-header with-border">
+            <h1 class="box-title">Report Result</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-ukfe{background-color:#f2f8ff;vertical-align:top}
+                    .tg .tg-ftk3{background-color:#f2f8ff}
+                    .tg .tg-yw4l{vertical-align:top}
+                    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+                <div class="tg-wrap">
+                    <table class="tg"  style="undefined; table-layout: fixed; width: 100%" >
+                        <tr>
+                            <th class="tg-ftk3" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    Ministry of Education
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    District-wise Textbooks Report
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    Report for the Period: __{{school_search_node.from_date}}__to__{{school_search_node.to_date}}__
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    S. No.
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Province
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    District
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    School Name
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Grade
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Language
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Title
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" colspan="3">
+                                <h5>
+                                    Quantity Received
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Distributed
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Available Stock
+                                </h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Received
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Damaged
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>
+                        </tr>
+                        <tbody ng-repeat="province_list_item in report_list_school">
+                        <tr ng-repeat="report_item_province in province_list_item">
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.id}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.province_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.district_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.School_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.grade}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.language}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.title}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_recieved}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_dmg}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_lost}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_sent}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.avalaible_blance}}
+                                </b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box box-primary" ng-show="report_type_selected == 5">
+        <div class="box-header with-border">
+            <h1 class="box-title">{{report_types[report_type_selected]['title']}}</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <form name="frmSearchSentShipment" class="form-horizontal" novalidate="">
+                        <table  style="undefined; table-layout: fixed; width: 100%">
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Province</label>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <select name="province" class="form-control" ng-model="sent_search_node.province" ng-required="true">
+                                        <option value="0">Select Province</option>
+                                        <!-- <option ng-repeat="province in province_list" value="{{province.id}}"> {{province.en_name}}</option> -->
+
+                                        <option ng-if="locale_string==='en'" ng-repeat="province in province_list" value="{{province.id}}"> {{province.en_name}}
+                                        </option>
+                                        
+                                        <option ng-if="locale_string==='fa' || locale_string==='ps'" ng-repeat="province in province_list"
+                                            value="{{province.id}}"> {{province.dr_name}}
+                                        </option>
+
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date From: </label>
+                                    <input type="text" class="form-control has-error datepick" id="from_date" name="from_date"  value=""
+                                           ng-model="sent_search_node.from_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.from_date.$invalid && frmSearchSentShipment.from_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date To: </label>
+                                    <input type="text" class="form-control has-error datepick" id="to_date" name="to_date"  value=""
+                                           ng-model="sent_search_node.to_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.to_date.$invalid && frmSearchSentShipment.to_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="searchReport_school_district()" ng-disabled="frmSearchSentShipment.$invalid">Search</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-primary"  ng-show="report_type_selected == 5">
+        <div class="box-header with-border">
+            <h1 class="box-title">Report Result</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-ukfe{background-color:#f2f8ff;vertical-align:top}
+                    .tg .tg-ftk3{background-color:#f2f8ff}
+                    .tg .tg-yw4l{vertical-align:top}
+                    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+                <div class="tg-wrap">
+                    <table class="tg"  style="undefined; table-layout: fixed; width: 100%" >
+                        <tr>
+                            <th class="tg-ftk3" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    Ministry of Education
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    District-wise Summery Report of School Inventories
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="12" style=" text-align: center;">
+                                <h4>
+                                    Report for the Period: __{{sent_search_node.from_date}}__to__{{sent_search_node.to_date}}__
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    S. No.
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Province
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    District
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Grade
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Language
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Title
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Quantity Sent to
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" colspan="2">
+                                <h5>
+                                    Quantity Received
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Distributed
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Available Stock
+                                </h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Received (Usable)
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Damaged
+                                </h5>
+                            </td>
+                            <!--<td class="tg-kmuf">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>-->
+                        </tr>
+                        <tbody ng-repeat="province_list_item in report_list_district_school">
+                        <tr ng-repeat="report_item_province in province_list_item">
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.id}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.province_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.district_name}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.grade}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.language}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.title}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_sent_to}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_recieved}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_dmg}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_lost}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_sent}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.avalaible_blance}}
+                                </b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<!--
+
+
+    <div class="box box-primary" ng-show="report_type_selected == 4">
+        <div class="box-header with-border">
+            <h1 class="box-title">{{report_types[report_type_selected]['title']}}</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <div class="table-responsive">
+                    <form name="frmSearchSentShipment" class="form-horizontal" novalidate="">
+                        <table  style="undefined; table-layout: fixed; width: 100%">
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date from : </label>
+                                    <input type="text" class="form-control has-error datepick" id="from_date" name="from_date"  value=""
+                                           ng-model="central_search_node.from_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.from_date.$invalid && frmSearchSentShipment.from_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <label class=" control-label">Date To : </label>
+                                    <input type="text" class="form-control has-error datepick" id="to_date" name="to_date"  value=""
+                                           ng-model="central_search_node.to_date" ng-required="true">
+                                    <span class="help-inline"
+                                          ng-show="frmSearchSentShipment.to_date.$invalid && frmSearchSentShipment.to_date.$touched">We can't let you continue without providing the recieve date for this shipment</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l" style="width: 50%">
+
+                                </td>
+                                <td class="tg-yw4l" style="width: 50%">
+                                    <button type="button" class="btn btn-primary" id="btn-save" ng-click="searchReport_central()" ng-disabled="frmSearchSentShipment.$invalid">Search the report</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                &lt;!&ndash; /.table-responsive &ndash;&gt;
+            </div>
+        </div>
+    </div>
+-->
+<!--
+
+    <div class="box box-primary"  ng-show="report_type_selected == 4">
+        <div class="box-header with-border">
+            <h1 class="box-title">Report Result</h1>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                    <i class="fa fa-times"></i></button>
+            </div>
+
+            <div class="box-body">
+                <style type="text/css">
+                    .tg  {border-collapse:collapse;border-spacing:0;}
+                    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                    .tg .tg-ukfe{background-color:#f2f8ff;vertical-align:top}
+                    .tg .tg-ftk3{background-color:#f2f8ff}
+                    .tg .tg-yw4l{vertical-align:top}
+                    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+                <div class="tg-wrap">
+                    <table class="tg"  style="undefined; table-layout: fixed; width: 100%" >
+                        <tr>
+                            <th class="tg-ftk3" colspan="9" style=" text-align: center;">
+                                <h4>
+                                    Ministry of Education
+                                </h4>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="9" style=" text-align: center;">
+                                <h4>
+                                    Central-wise Textbooks Report
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" colspan="9" style=" text-align: center;">
+                                <h4>
+                                    Report for the Period: __{{central_search_node.from_date}}__to__{{central_search_node.to_date}}__
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    S. No.
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Grade
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Language
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Title
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" colspan="3">
+                                <h5>
+                                    Quantity Received
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Distributed
+                                </h5>
+                            </td>
+                            <td class="tg-ukfe" rowspan="2">
+                                <h5>
+                                    Total Available Stock
+                                </h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Received
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Damaged
+                                </h5>
+                            </td>
+                            <td class="tg-kmuf">
+                                <h5>
+                                    Total Lost
+                                </h5>
+                            </td>
+                        </tr>
+                        <tbody ng-repeat="province_list_item in report_list_central">
+                        <tr ng-repeat="report_item_province in province_list_item">
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.id}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.grade}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.language}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.title}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.Total_recieved}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_dmg}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_lost}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.total_sent}}
+                                </b>
+                            </td>
+                            <td class="tg-yw4l">
+                                <b>
+                                    {{report_item_province.avalaible_blance}}
+                                </b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                &lt;!&ndash; /.table-responsive &ndash;&gt;
+            </div>
+        </div>
+    </div>-->
+
+
+
+</section>
+
+
+
+
+
+
+

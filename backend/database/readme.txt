@@ -1,0 +1,1 @@
+acr_inventory.sql is the complete database schema with some sample data of OTIMS.
