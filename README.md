@@ -1,5 +1,5 @@
 # Introduction
-The Online Textbooks Inventory Management System (OTIMS) is a web and mobile application developed for the Ministry of Education to digitize the current manual paper-based textbooks distribution process.
+The Online Textbooks Inventory Management System (OTIMS) is a web and mobile application initially developed for the Ministry of Education of Afghanistan to digitize the current manual paper-based textbooks distribution process.
 At the request of USAID-Afghanistan, Afghan Children Read (ACR) conducted a rapid assessment of the Ministry’s distribution system, and, in view of its findings, introduced an Online Textbook Inventory Management System (OTIMS) that is digitized, efficient, and cost-effective for replacing the manual system.
 
 The interface of OTIMS on the web and mobile are identical. The only difference being that the mobile application is an APK file which can be installed on Android devices while the web version must be accessed using the URL.
@@ -13,8 +13,6 @@ It is important to note that the frontend for web and mobile both share the same
 
 The backend for OTIMS is developed using Laravel, which is a PHP framework used for developing APIs or full-fledged web applications. It is important to note that both the mobile and web version frontends share the same source code base for backend as well.
 
-To integrate OTIMS with EMIS of Ministry of Education, another backend or API had to be developed using .NET Framework. As mentioned above, this second API is developed using .NET Framework in the C# language and it enables OTIMS to communicate with EMIS and update its schools, districts, and provinces to what is available in EMIS as well as to retrieve enrollment data for schools.
-
 The primary database for OTIMS is designed and developed using MySQL.
 
 # Setting up the Development Environment
@@ -27,7 +25,7 @@ To run and debug the OTIMS frontend, you will need to install the following:
 
 2.	Install Vue CLI using instructions on its official website: https://cli.vuejs.org/guide/installation.html. The commands mentioned should be run using command line on Windows or terminal on Linux.
 
-3.	Install Cordova using the instructions on its official website: https://cordova.apache.org/#getstarted. Please note that you will have to install Cordova and note create any projects.
+3.	Install Cordova using the instructions on its official website: https://cordova.apache.org/#getstarted. Please note that you will have to install Cordova and not create any projects.
 
 4.	Download and install Android studio using the instructions on its official website: https://developer.android.com/studio. The installation process is simple and straightforward.
 
