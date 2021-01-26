@@ -7,7 +7,7 @@ The interface of OTIMS on the web and mobile are identical. The only difference 
 This note serves as a concise but comprehensive guide for developers to understand the technologies used for developing OTIMS as well as to help set up the development environment to run and debug OTIMS. This note may also be used to help set up the production environment.
 
 # Demo Installation
-You can access a fully working demo installation of OTIMS at http://108.175.5.232 . For user accounts, please refer to the documents/accounts.txt file in the repository. 
+You can access a fully working demo installation of OTIMS at http://108.175.5.232 . For user accounts, please refer to the documents/Accounts.txt file in the repository. 
 
 # Programming Languages, Frameworks, and Tools Used
 OTIMS has been developed using several languages, frameworks, and tools. The frontend of OTIMS Web has been developed using Vue.js Framework, which is a JavaScript, while OTIMS Mobile has been developed using Vue.JS Framework and Cordova Framework.
